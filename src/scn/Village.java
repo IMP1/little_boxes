@@ -19,7 +19,7 @@ public class Village extends Scene {
 	private ArrayList<Minion> heroesOnAdventures;
 	private ArrayList<Mission> missions;
 	private ArrayList<Notification> messages;
-
+	
 	public Village(Main main) {
 		super(main);
 	}
@@ -153,7 +153,7 @@ public class Village extends Scene {
 		for (Minion hero : mission.heroes) {
 			heroesOnAdventures.remove(hero);
 		}
-//		System.out.println("Mission returned.");
+		System.out.println("Mission returned.");
 	}
 	
 	private void testMission() {

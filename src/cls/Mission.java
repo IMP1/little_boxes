@@ -39,15 +39,15 @@ public class Mission {
 		timer = 0;
 		timerReturn = 0;
 		
-//		System.out.println("New Adventure");
-//		System.out.println("-------------");
-//		for (int i = 0; i < Math.max(heroes.length, villains.length); i ++) {
-//			String h = (i < heroes.length) ? heroes[i].name : "     ";
-//			String v = (i < villains.length) ? villains[i].name : "";
-//			String vs = (i+1 == Math.max(heroes.length, villains.length) / 2) ? "vs" : "  ";
-//			System.out.println(h + "\t" + vs + "\t" + v);
-//		}
-//		System.out.println("-------------");
+		System.out.println("New Adventure");
+		System.out.println("-------------");
+		for (int i = 0; i < Math.max(heroes.length, villains.length); i ++) {
+			String h = (i < heroes.length) ? heroes[i].name : "     ";
+			String v = (i < villains.length) ? villains[i].name : "";
+			String vs = (i+1 == Math.max(heroes.length, villains.length) / 2) ? "vs" : "  ";
+			System.out.println(h + "\t" + vs + "\t" + v);
+		}
+		System.out.println("-------------");
 	}
 	
 	private Enemy[] generateEnemies() {
@@ -56,7 +56,7 @@ public class Mission {
 		amount = Math.max(1, amount);
 		Enemy[] enemies = new Enemy[amount];
 		for (int i = 0; i < amount; i ++) {
-			enemies[i] = Enemy.generateRandom();
+			enemies[i] = Enemy.generateRandom(difficulty);
 		}
 		return enemies;
 	}
@@ -114,12 +114,12 @@ public class Mission {
 		int damage = Math.max(1, hero.strength - target.defence);
 		// Deal damage
 		target.takeDamage(damage);
-//		System.out.println(hero.name + " attacks " + target.name + " for " + damage + " damage! Health now " + target.health);
+		System.out.println(hero.name + " attacks " + target.name + " for " + damage + " damage! Health now " + target.health);
 		// Gain exp
 		if (target.health <= 0) {
 			hero.gainExp(target.maxHealth);
 			hero.gainGold(target.maxHealth * 3);
-//			System.out.println(hero.name + " gains " + target.maxHealth + " experience.");
+			System.out.println(hero.name + " gains " + target.maxHealth + " experience.");
 		}
 		// Check for win
 		if (allEnemiesDead()) endBattle(Result.SUCCESS);
@@ -138,7 +138,7 @@ public class Mission {
 		int damage = Math.max(1, enemy.strength - target.defence);
 		// Deal damage
 		target.takeDamage(damage);
-//		System.out.println(enemy.name + " attacks " + target.name + " for " + damage + " damage! Health now " + target.health);
+		System.out.println(enemy.name + " attacks " + target.name + " for " + damage + " damage! Health now " + target.health);
 		// Check for loss
 		if (allHeroesDead()) endBattle(Result.DEFEAT);
 	}
@@ -185,7 +185,7 @@ public class Mission {
 			hero.gainExp(experienceGained);
 			hero.gainGold(goldGained);
 		}
-//		System.out.println("Mission finished.");
+		System.out.println("Mission finished.");
 		returnScene.missionReturn(this, result);
 	}
 
