@@ -444,7 +444,7 @@ public abstract class graphics {
 	 */
 	public static void draw(Image drawable, double x, double y) {
 		double w = drawable.width();
-		double h = -drawable.height();
+		double h = drawable.height();
 		
 		glEnable(GL_TEXTURE_2D);
     	drawable.texture.bind();
