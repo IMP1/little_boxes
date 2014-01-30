@@ -1,7 +1,5 @@
 package run;
 
-import java.io.File;
-
 import org.lwjgl.Sys;
 
 import jog.*;
@@ -12,7 +10,7 @@ public class Main implements jog.input.EventHandler {
 		new Main();
 	}
 	
-	final private String TITLE = "Heroes";
+	final private String TITLE = "Minions";
 	final private int WIDTH = 960;
 	final private int HEIGHT = 640;
 	
