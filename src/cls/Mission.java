@@ -99,6 +99,8 @@ public class Mission {
 				characterTimers[i] -= 1.0 / ((double)b.speed / 4);
 			}
 		}
+		if (allHeroesDead()) endBattle(Result.DEFEAT);
+		if (allEnemiesDead()) endBattle(Result.SUCCESS);
 	}
 	
 	private void attack(Minion hero) {
@@ -121,8 +123,6 @@ public class Mission {
 			hero.gainGold(target.maxHealth * 3);
 			System.out.println(hero.name + " gains " + target.maxHealth + " experience.");
 		}
-		// Check for win
-		if (allEnemiesDead()) endBattle(Result.SUCCESS);
 	}
 	
 	private void attack(Enemy enemy) {
@@ -139,8 +139,6 @@ public class Mission {
 		// Deal damage
 		target.takeDamage(damage);
 		System.out.println(enemy.name + " attacks " + target.name + " for " + damage + " damage! Health now " + target.health);
-		// Check for loss
-		if (allHeroesDead()) endBattle(Result.DEFEAT);
 	}
 	
 	private boolean allHeroesDead() {
