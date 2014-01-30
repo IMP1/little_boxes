@@ -15,6 +15,9 @@ import run.Main;
 public class Village extends Scene {
 	
 	final static public int MAX_HEROES = 8;
+	
+	private static graphics.Image background = graphics.newImage("map.png");
+	
 	private ArrayList<Minion> heroes;
 	private ArrayList<Minion> heroesOnAdventures;
 	private ArrayList<Mission> missions;
@@ -85,9 +88,10 @@ public class Village extends Scene {
 	@Override
 	public void draw() {
 		graphics.setColour(255, 255, 255);
-		graphics.print("Heroes:", 32, 32);
-		graphics.print("_______________", 30, 40);
-		graphics.print("______________", 30 + 4, 40);
+		graphics.draw(background, 0, 0);
+		graphics.print("Heroes:", 192, 192);
+		graphics.print("_______________", 190, 200);
+		graphics.print("______________", 190 + 4, 200);
 		for (int i = 0; i < heroes.size(); i ++) {
 			int height = 80;
 			Minion hero = heroes.get(i);
@@ -96,40 +100,40 @@ public class Village extends Scene {
 			} else {
 				graphics.setColour(255, 255, 255);
 			}
-			graphics.print(">   " + hero.name, 40, 64 + i * height);
+			graphics.print(">   " + hero.name, 224, 216 + i * height);
 			if (heroesOnAdventures.contains(hero)) {
-				graphics.print("<Away>", 96, 96 + i * height);
+				graphics.print("<Away>", 256, 248 + i * height);
 			} else {
-				graphics.print(hero.stats(), 80, 80 + i * height);
+				graphics.print(hero.stats(), 256, 240 + i * height);
 				int expWidth = 64;
 				int exp = expWidth * hero.expirience / hero.experienceToNextLevel();
-				graphics.rectangle(false, 88, 100 + i * height, expWidth, 3);
-				graphics.rectangle(true, 88, 100 + i * height, exp, 3);
-				graphics.print("" + hero.level, 78, 97 + i * height);
-				graphics.print("" + (hero.level+1), 78 + 12 + expWidth, 97 + i * height);
+				graphics.rectangle(false, 266, 258 + i * height, expWidth, 3);
+				graphics.rectangle(true, 266, 258 + i * height, exp, 3);
+				graphics.print("" + hero.level, 256, 256 + i * height);
+				graphics.print("" + (hero.level+1), 256 + 12 + expWidth, 256 + i * height);
 				int healthHeight = 48;
 				int health = healthHeight * hero.health / hero.maxHealth;
-				graphics.rectangle(false, 58, 60 + i * height, 4, healthHeight);
-				graphics.rectangle(true, 58, 60 + i * height + healthHeight - health, 4, health);
-				graphics.print("£" + hero.gold, 168, 97 + i * height);
+				graphics.rectangle(false, 240, 216 + i * height, 4, healthHeight);
+				graphics.rectangle(true, 240, 216 + i * height + healthHeight - health, 4, health);
+				graphics.print("£" + hero.gold, 360, 256 + i * height);
 			}
 		}
 		
-		graphics.print("Current Adventures:", 576, 32);
-		graphics.print("_________________________", 574, 40);
-		graphics.print("________________________", 574 + 4, 40);
+		graphics.print("Current Adventures:", 576, 256);
+		graphics.print("_________________________", 574, 264);
+		graphics.print("________________________", 574 + 4, 264);
 		for (int i = 0; i < missions.size(); i ++) {
 			Mission m = missions.get(i);
-			graphics.print("Difficulty: " + m.difficulty, 600, 64 + i * 64);
+			graphics.print("Difficulty: " + m.difficulty, 600, 292 + i * 64);
 			for (int j = 0; j < m.heroes.length; j ++) {
-				graphics.print(m.heroes[j].name, 600 + j * 96, 96 + i * 64);
+				graphics.print(m.heroes[j].name, 600 + j * 96, 320 + i * 64);
 			}
 			double r = (m.timer * Math.PI) % (4 * Math.PI);
 			double angle = Math.PI / 2;
 			if (r > (2 * Math.PI)) {
 				r = (r % (2 * Math.PI)) - (2 * Math.PI);
 			}
-			graphics.arc(true, 580, 80 + i * 64, 6, angle, -r);
+			graphics.arc(true, 580, 308 + i * 64, 6, angle, -r);
 		}
 		if (messages.size() > 0) {
 			messages.get(0).draw();
