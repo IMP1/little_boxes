@@ -63,7 +63,9 @@ public class Box {
 	private void turnBy(int dr) {
 		boolean[] newSolid = new boolean[4];
 		for (int i = 0; i < 4; i ++) {
-			newSolid[i] = solid[(i - dr) % 4];
+			int newID = (i - dr) % 4;
+			while (newID < 0) newID += solid.length;
+			newSolid[i] = solid[newID];
 		}
 		solid = newSolid;
 	}

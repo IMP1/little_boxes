@@ -1,7 +1,9 @@
 package lvl;
 
+import cls.Button;
 import cls.Map;
 import cls.Box;
+import cls.RotateButton;
 
 public class Levels {
 
@@ -9,6 +11,7 @@ public class Levels {
 		int width, height, startX, startY;
 		int[] tiles;
 		Box[] boxes;
+		Button[] buttons;
 		String message;
 		
 		switch(id) {
@@ -113,6 +116,23 @@ public class Levels {
 			boxes[3] = new Box(Box.Type.DEFAULT, 4, 4, true, true, false, true, 3);
 			message = "Some levels are harder than others.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
+			
+		case 8:
+			width = 5;
+			height = 5;
+			startX = 0;
+			startY = 0;
+			tiles = new int[width * height];
+			for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;
+			tiles[2 * width + 3] = 2;
+			boxes = new Box[3];
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 0, true, false, true, true, 1);
+			boxes[1] = new Box(Box.Type.GOAL_OUTER, 3, 3, true, true, true, false, 4);
+			boxes[2] = new Box(Box.Type.DEFAULT, 2, 0, true, true, true, false, 3);
+			buttons = new Button[1];
+			buttons[0] = new RotateButton(1, 1, 3, 2, tiles, 1);
+			message = "Some levels are harder than others.";
+			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
 
 		default:
 			throw new IndexOutOfBoundsException("There is no map with the id " + id + ".");
@@ -120,6 +140,6 @@ public class Levels {
 		}
 	}
 	
-	public final static int LEVEL_COUNT = 7;
+	public final static int LEVEL_COUNT = 8;
 	
 }

@@ -23,7 +23,7 @@ public class Game extends Scene {
 	@Override
 	public void start() {
 		music = audio.newMusic("lil_bxs.ogg");
-		music.play();
+//		music.play();
 		player = new Player();
 		loadMap(main.score.levelUpTo());
 	}
@@ -92,6 +92,12 @@ public class Game extends Scene {
 		if (dy > 0) actions.add(LevelSolution.Action.DOWN);
 		if (dx < 0) actions.add(LevelSolution.Action.LEFT);
 		if (dx > 0) actions.add(LevelSolution.Action.RIGHT);
+		
+		for (Button button : map.buttons) {
+			if (button.x == player.x() && button.y == player.y()) {
+				button.act(map);
+			}
+		}
 		
 		checkWinState();
 	}

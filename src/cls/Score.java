@@ -8,7 +8,10 @@ public class Score {
 	private LevelSolution[] solutions;
 
 	public Score() {
-		levelUpTo = 1;
+		
+		// TODO change to 1
+		levelUpTo = Levels.LEVEL_COUNT;
+		
 		solutions = new LevelSolution[Levels.LEVEL_COUNT];
 		for (int i = 0; i < solutions.length; i ++) {
 			solutions[i] = null;
