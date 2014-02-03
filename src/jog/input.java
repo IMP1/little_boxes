@@ -174,6 +174,12 @@ public abstract class input {
 	public final static int KEY_9 = Keyboard.KEY_9;
 	public final static int KEY_0 = Keyboard.KEY_0;
 	
+	public final static int KEY_FULL_STOP = Keyboard.KEY_PERIOD;
+	public final static int KEY_PERIOD = KEY_FULL_STOP;
+	public final static int KEY_COMMA = Keyboard.KEY_COMMA;
+	public final static int KEY_MINUS = Keyboard.KEY_MINUS;
+	public final static int KEY_PLUS = Keyboard.KEY_ADD;
+	
 	public final static int KEY_F1 = Keyboard.KEY_F1;
 	public final static int KEY_F2 = Keyboard.KEY_F2;
 	public final static int KEY_F3 = Keyboard.KEY_F3;

@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="ext/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="ext/lwjgl.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Heroes/ext/natives/windows"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Little Boxes/ext/natives/windows"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="ext/slick.jar"/>
