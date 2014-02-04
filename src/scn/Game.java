@@ -13,7 +13,7 @@ public class Game extends Scene {
 	private boolean winState;
 	private Player player;
 	private int currentLevel;
-	private audio.Music music;
+//	private audio.Music music;
 	private ArrayList<LevelSolution.Action> actions;
 
 	public Game(Main main) {
