@@ -179,6 +179,9 @@ public abstract class input {
 	public final static int KEY_COMMA = Keyboard.KEY_COMMA;
 	public final static int KEY_MINUS = Keyboard.KEY_MINUS;
 	public final static int KEY_PLUS = Keyboard.KEY_ADD;
+	public final static int KEY_BACKSLASH = Keyboard.KEY_BACKSLASH;
+	public final static int KEY_FORWARD_SLASH = Keyboard.KEY_SLASH;
+	public final static int KEY_BACKTICK = Keyboard.KEY_GRAVE;
 	
 	public final static int KEY_F1 = Keyboard.KEY_F1;
 	public final static int KEY_F2 = Keyboard.KEY_F2;
@@ -208,10 +211,13 @@ public abstract class input {
 	public final static int KEY_RCRTL = Keyboard.KEY_RCONTROL;
 	public final static int KEY_LSHIFT = Keyboard.KEY_LSHIFT;
 	public final static int KEY_RSHIFT = Keyboard.KEY_RSHIFT;
+	public final static int KEY_PAGEUP = Keyboard.KEY_PRIOR;
+	public final static int KEY_PAGEDOWN = Keyboard.KEY_NEXT;
 	public final static int KEY_CAPS_LOCK = Keyboard.KEY_CAPITAL;
 	public final static int KEY_TAB = Keyboard.KEY_TAB;
 	public final static int KEY_RETURN = Keyboard.KEY_RETURN;
 	public final static int KEY_BACKSPACE = Keyboard.KEY_BACK;
+	public final static int KEY_DELETE = Keyboard.KEY_DELETE;
 	
 	public final static int KEY_UP = Keyboard.KEY_UP;
 	public final static int KEY_DOWN = Keyboard.KEY_DOWN;
