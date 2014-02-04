@@ -11,6 +11,7 @@ public class Score {
 		
 		// TODO change to 1
 		levelUpTo = Levels.LEVEL_COUNT;
+		levelUpTo = 1;
 		
 		solutions = new LevelSolution[Levels.LEVEL_COUNT];
 		for (int i = 0; i < solutions.length; i ++) {
