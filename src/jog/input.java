@@ -182,6 +182,9 @@ public abstract class input {
 	public final static int KEY_BACKSLASH = Keyboard.KEY_BACKSLASH;
 	public final static int KEY_FORWARD_SLASH = Keyboard.KEY_SLASH;
 	public final static int KEY_BACKTICK = Keyboard.KEY_GRAVE;
+	public final static int KEY_RIGHT_BRACKET = Keyboard.KEY_RBRACKET;
+	public final static int KEY_LEFT_BRACKET = Keyboard.KEY_LBRACKET;
+	public final static int KEY_EQUALS = Keyboard.KEY_EQUALS;
 	
 	public final static int KEY_F1 = Keyboard.KEY_F1;
 	public final static int KEY_F2 = Keyboard.KEY_F2;
