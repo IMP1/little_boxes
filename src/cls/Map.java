@@ -6,6 +6,7 @@ import jog.window;
 public class Map {
 	
 	public final static int TILE_SIZE = 64;
+	public final static int CIRCLE_RADIUS = TILE_SIZE / 4;
 
 	public final int width;
 	public final int height;
@@ -42,6 +43,16 @@ public class Map {
 		if (x < 0 || y < 0 || x >= width || y >= height) return false;
 		return tiles[y * width + x] != 1;
 	}
+	
+	public int mouseToTileX(int mx) { 
+		int centreX = (window.width() - (width * TILE_SIZE)) / 2;
+		return (mx - centreX) / TILE_SIZE;
+	}
+	
+	public int mouseToTileY(int my) { 
+		int centreY = (window.height() - (height * TILE_SIZE)) / 2;
+		return (my - centreY) / TILE_SIZE;
+	}
 
 	public void draw(Player player) {
 		int centreX = (window.width() - (width * TILE_SIZE)) / 2;
@@ -69,10 +80,9 @@ public class Map {
 		if (tile == 2 || tile == 3) {
 			int circleX = x + TILE_SIZE/2;
 			int circleY = y + TILE_SIZE/2;
-			int circleRadius = TILE_SIZE / 4;
-			int arrowRadius = circleRadius * 2 / 3;
+			int arrowRadius = CIRCLE_RADIUS * 2 / 3;
 			graphics.setColour(64, 64, 64, 192);
-			graphics.circle(true, circleX, circleY, circleRadius);
+			graphics.circle(true, circleX, circleY, CIRCLE_RADIUS);
 			double arcLength =  Math.PI * 3 / 2;
 			graphics.setColour(255, 255, 255);
 			graphics.arc(false, circleX, circleY, arrowRadius, Math.PI/2, (tile == 2) ? arcLength : -arcLength );
