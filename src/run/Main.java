@@ -12,7 +12,7 @@ public class Main implements jog.input.EventHandler {
 		new Main();
 	}
 	
-	final private String TITLE = "Minions";
+	final private String TITLE = "Little Boxes";
 	final private int WIDTH = 960;
 	final private int HEIGHT = 640;
 	
