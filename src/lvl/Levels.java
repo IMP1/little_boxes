@@ -125,13 +125,12 @@ public class Levels {
 			tiles = new int[width * height];
 			for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;
 			tiles[2 * width + 3] = 2;
-			boxes = new Box[3];
-			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 0, true, false, true, true, 1);
+			boxes = new Box[2];
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 4, false, false, false, true, 1);
 			boxes[1] = new Box(Box.Type.GOAL_OUTER, 3, 3, true, true, true, false, 4);
-			boxes[2] = new Box(Box.Type.DEFAULT, 2, 0, true, true, true, false, 3);
 			buttons = new Button[1];
-			buttons[0] = new RotateButton(1, 1, 3, 2, tiles, 1);
-			message = "Some levels are harder than others.";
+			buttons[0] = new RotateButton(1, 1, 3, 2, Map.CIRCLE_RADIUS * 2, tiles, 1);
+			message = "Moving onto a button can activate certain tiles, such as rotating ones.";
 			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
 
 		default:
