@@ -4,8 +4,8 @@ public class RotateButton extends Button {
 	
 	public final int direction;
 	
-	public RotateButton(int x, int y, int targetX, int targetY, int[] tiles, int direction) {
-		super(x, y, targetX, targetY, tiles);
+	public RotateButton(int x, int y, int targetX, int targetY, int targetHeight, int[] tiles, int direction) {
+		super(x, y, targetX, targetY, targetHeight, tiles);
 		this.direction = direction;
 	}
 
