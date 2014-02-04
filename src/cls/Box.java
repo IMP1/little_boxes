@@ -4,6 +4,7 @@ import jog.graphics;
 
 public class Box {
 	
+	public final static int MAX_SIZE = 4;
 	public final static int SIZE_MULTIPLIER = 6;
 	
 	public enum Type {
