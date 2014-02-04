@@ -22,7 +22,7 @@ public class Game extends Scene {
 
 	@Override
 	public void start() {
-		music = audio.newMusic("lil_bxs.ogg");
+//		music = audio.newMusic("Wallpaper.mp3");
 //		music.play();
 		player = new Player();
 		loadMap(main.score.levelUpTo());
@@ -160,7 +160,7 @@ public class Game extends Scene {
 
 	@Override
 	public void close() {
-		music.stop();
+//		music.stop();
 	}
 
 }
