@@ -29,6 +29,8 @@ public class Title extends Scene {
 	public void keyPressed(int key) {
 		if (key == input.KEY_SPACE) {
 			main.setScene(new Game(main));
+		} else if (key == input.KEY_BACKSLASH) {
+			main.setScene(new LevelEditor(main));
 		}
 	}
 
