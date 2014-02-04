@@ -3,6 +3,7 @@ package scn;
 import java.util.ArrayList;
 
 import cls.Box;
+import cls.Box.Type;
 import cls.Button;
 import cls.Map;
 import cls.Player;
@@ -57,14 +58,21 @@ public class LevelEditor extends Scene {
 		if (key == input.MOUSE_LEFT) {
 			int i = map.mouseToTileX(mx);
 			int j = map.mouseToTileY(my);
-			// Place solid tiles
-			if (input.isKeyDown(input.KEY_1)) {
-				tiles[j * mapWidth + i] = 1;
-			}
-			// Place non-solid tiles
-			else if (input.isKeyDown(input.KEY_BACKTICK)) {
+			// Place empty tiles
+			if (input.isKeyDown(input.KEY_BACKTICK)) {
 				tiles[j * mapWidth + i] = 0;
 			} 
+			// Place solid tiles
+			else if (input.isKeyDown(input.KEY_1)) {
+				tiles[j * mapWidth + i] = 1;
+			}
+			// Place rotating tiles
+			else if (input.isKeyDown(input.KEY_2)) {
+				tiles[j * mapWidth + i] = 2;
+			}
+			else if (input.isKeyDown(input.KEY_3)) {
+				tiles[j * mapWidth + i] = 3;
+			}
 			// Place starting position
 			else if (input.isKeyDown(input.KEY_H)) {
 				player.setPosition(i, j);
@@ -79,15 +87,78 @@ public class LevelEditor extends Scene {
 				if (boxAt(i, j) != null) {
 					boxes.remove(boxAt(i, j));
 				}
-				refreshMap();
 			}
-			// Make rotate button
+			// Create 3 sided inner goal box
+			else if (input.isKeyDown(input.KEY_RIGHT_BRACKET) && input.isKeyDown(input.KEY_RCRTL)) {
+				boxes.add(new Box(Box.Type.GOAL_INNER, i, j, true, true, false, true, 1));
+			}
+			// Create 2 sided inner goal box
+			else if (input.isKeyDown(input.KEY_EQUALS) && input.isKeyDown(input.KEY_RCRTL)) {
+				boxes.add(new Box(Box.Type.GOAL_INNER, i, j, true, true, false, false, 1));
+			}
+			// Create 1 sided inner goal box
+			else if (input.isKeyDown(input.KEY_MINUS) && input.isKeyDown(input.KEY_RCRTL)) {
+				boxes.add(new Box(Box.Type.GOAL_INNER, i, j, true, false, false, false, 1));
+			} 
+			// Create 3 sided outer goal box
+			else if (input.isKeyDown(input.KEY_RIGHT_BRACKET) && input.isKeyDown(input.KEY_RSHIFT)) {
+				boxes.add(new Box(Box.Type.GOAL_OUTER, i, j, true, true, false, true, Box.MAX_SIZE));
+			}
+			// Create 2 sided outer goal box
+			else if (input.isKeyDown(input.KEY_EQUALS) && input.isKeyDown(input.KEY_RSHIFT)) {
+				boxes.add(new Box(Box.Type.GOAL_OUTER, i, j, true, true, false, false, Box.MAX_SIZE));
+			}
+			// Create 1 sided outer goal box
+			else if (input.isKeyDown(input.KEY_MINUS) && input.isKeyDown(input.KEY_RSHIFT)) {
+				boxes.add(new Box(Box.Type.GOAL_OUTER, i, j, true, false, false, false, Box.MAX_SIZE));
+			} 
+			// Create 3 sided box
+			else if (input.isKeyDown(input.KEY_RIGHT_BRACKET)) {
+				boxes.add(new Box(Box.Type.DEFAULT, i, j, true, true, false, true, 2));
+			}
+			// Create 2 sided box
+			else if (input.isKeyDown(input.KEY_EQUALS)) {
+				boxes.add(new Box(Box.Type.DEFAULT, i, j, true, true, false, false, 2));
+			}
+			// Create 1 sided box
+			else if (input.isKeyDown(input.KEY_MINUS)) {
+				boxes.add(new Box(Box.Type.DEFAULT, i, j, true, false, false, false, 2));
+			} 
+			// Create rotate button
 			else if (input.isKeyDown(input.KEY_R)) {
 				dragButtonType = RotateButton.class;
 				dragX = i;
 				dragY = j;
 			}
 		}
+		if (key == input.MOUSE_MIDDLE) {
+			int i = map.mouseToTileX(mx);
+			int j = map.mouseToTileY(my);
+			if (boxAt(i, j) != null) {
+				boxAt(i, j).turnRight();
+				refreshMap();
+			}
+		}
+		if (key == input.MOUSE_RIGHT) {
+			int i = map.mouseToTileX(mx);
+			int j = map.mouseToTileY(my);
+			if (boxAt(i, j) != null) {
+				Box oldBox = boxAt(i, j);
+				Box.Type type;
+				if (oldBox.isGoalInner) {
+					type = Type.GOAL_INNER;
+				} else if (oldBox.isGoalOuter) { 
+					type = Type.GOAL_OUTER;
+				} else {
+					type = Type.DEFAULT;
+				}
+				Box newBox = new Box(type, i, j, oldBox.solidFrom(0, -1), oldBox.solidFrom(0, 1), oldBox.solidFrom(-1, 0), oldBox.solidFrom(1, 0), (oldBox.size % Box.MAX_SIZE) + 1);
+				boxes.remove(oldBox);
+				boxes.add(newBox);
+				refreshMap();
+			}
+		}
+		refreshMap();
 	}
 
 	@Override
@@ -108,6 +179,12 @@ public class LevelEditor extends Scene {
 
 	@Override
 	public void keyPressed(int key) {
+		if (key == input.KEY_ESCAPE) {
+			main.setScene(new Title(main));
+		}
+		if (key == input.KEY_R && input.isKeyDown(input.KEY_LCRTL)) {
+			start();
+		}
 		if (key == input.KEY_P && input.isKeyDown(input.KEY_LCRTL)) {
 			printMapText();
 		}
@@ -142,6 +219,7 @@ public class LevelEditor extends Scene {
 		tiles = newTiles;
 		refreshMap();
 		player.moveBy(1, 0);
+		for (Box box : boxes) box.moveBy(1, 0);
 	}
 	
 	private void addRows() {
@@ -158,6 +236,7 @@ public class LevelEditor extends Scene {
 		tiles = newTiles;
 		refreshMap();
 		player.moveBy(0, 1);
+		for (Box box : boxes) box.moveBy(0, 1);
 	}
 	
 	private void removeColumns() {
@@ -172,6 +251,7 @@ public class LevelEditor extends Scene {
 		tiles = newTiles;
 		refreshMap();
 		if (player.x() > 0) player.moveBy(-1, 0);
+		for (Box box : boxes) if (box.x() > 0) box.moveBy(-1, 0);
 	}
 	
 	private void removeRows() {
@@ -186,6 +266,7 @@ public class LevelEditor extends Scene {
 		tiles = newTiles;
 		refreshMap();
 		if (player.y() > 0) player.moveBy(0, -1);
+		for (Box box : boxes) if (box.y() > 0) box.moveBy(0, -1);
 	}
 
 	private void printMapText() {
@@ -206,10 +287,10 @@ public class LevelEditor extends Scene {
 				String line = "boxes[0] = new Box(Box.Type.GOAL_INNER, ";
 				line += box.x() + ", ";
 				line += box.y() + ", ";
-				line += box.solidFrom(0, 1) + ", ";
 				line += box.solidFrom(0, -1) + ", ";
-				line += box.solidFrom(1, 0) + ", ";
+				line += box.solidFrom(0, 1) + ", ";
 				line += box.solidFrom(-1, 0) + ", ";
+				line += box.solidFrom(1, 0) + ", ";
 				line += box.size + ");";
 				System.out.println(line);
 			}
@@ -219,10 +300,10 @@ public class LevelEditor extends Scene {
 				String line = "boxes[1] = new Box(Box.Type.GOAL_OUTER, ";
 				line += box.x() + ", ";
 				line += box.y() + ", ";
-				line += box.solidFrom(0, 1) + ", ";
 				line += box.solidFrom(0, -1) + ", ";
-				line += box.solidFrom(1, 0) + ", ";
+				line += box.solidFrom(0, 1) + ", ";
 				line += box.solidFrom(-1, 0) + ", ";
+				line += box.solidFrom(1, 0) + ", ";
 				line += box.size + ");";
 				System.out.println(line);
 			}
@@ -233,10 +314,10 @@ public class LevelEditor extends Scene {
 				String line = "boxes[" + n + "] = new Box(Box.Type.DEFAULT, ";
 				line += box.x() + ", ";
 				line += box.y() + ", ";
-				line += box.solidFrom(0, 1) + ", ";
 				line += box.solidFrom(0, -1) + ", ";
-				line += box.solidFrom(1, 0) + ", ";
+				line += box.solidFrom(0, 1) + ", ";
 				line += box.solidFrom(-1, 0) + ", ";
+				line += box.solidFrom(1, 0) + ", ";
 				line += box.size + ");";
 				System.out.println(line);
 				n ++;
