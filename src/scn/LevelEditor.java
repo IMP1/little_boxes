@@ -1,5 +1,8 @@
 package scn;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 
 import cls.Box;
@@ -30,6 +33,8 @@ public class LevelEditor extends Scene {
 	private int dragX = -1;
 	private int dragY = -1;
 	private Class<? extends Button> dragButtonType = null;
+	
+	private boolean showKey = false;
 
 	public LevelEditor(Main main) {
 		super(main);
@@ -53,6 +58,22 @@ public class LevelEditor extends Scene {
 		Button[] btns = new Button[buttons.size()];
 		map = new Map(mapWidth, mapHeight, player.x(), player.y(), tiles, boxes.toArray(bxs), buttons.toArray(btns), "Level under construction.");
 	}
+	
+	private Map testMap() {
+		Box[] boxes = new Box[this.boxes.size()];
+		for (int i = 0; i < boxes.length; i ++) {
+			Box b = this.boxes.get(i);
+			if (b.isGoalInner) {
+				boxes[i] = new Box(Box.Type.GOAL_INNER, b.x(), b.y(), b.solidFrom(0, -1), b.solidFrom(0, 1), b.solidFrom(-1, 0), b.solidFrom(1, 0), b.size);
+			} else if (b.isGoalOuter) {
+				boxes[i] = new Box(Box.Type.GOAL_OUTER, b.x(), b.y(), b.solidFrom(0, -1), b.solidFrom(0, 1), b.solidFrom(-1, 0), b.solidFrom(1, 0), b.size);
+			} else {
+				boxes[i] = new Box(Box.Type.DEFAULT, b.x(), b.y(), b.solidFrom(0, -1), b.solidFrom(0, 1), b.solidFrom(-1, 0), b.solidFrom(1, 0), b.size);
+			}
+		}
+		Button[] btns = new Button[buttons.size()];
+		return new Map(mapWidth, mapHeight, player.x(), player.y(), tiles, boxes, buttons.toArray(btns), "Testing Level.");
+	}
 
 	@Override
 	public void mousePressed(int key, int mx, int my) {
@@ -60,7 +81,7 @@ public class LevelEditor extends Scene {
 			int i = map.mouseToTileX(mx);
 			int j = map.mouseToTileY(my);
 			// Place empty tiles
-			if (input.isKeyDown(input.KEY_BACKTICK)) {
+			if (input.isKeyDown(input.KEY_BACKTICK) || input.isKeyDown(input.KEY_0)) {
 				tiles[j * mapWidth + i] = 0;
 			} 
 			// Place solid tiles
@@ -97,6 +118,10 @@ public class LevelEditor extends Scene {
 			else if (input.isKeyDown(input.KEY_EQUALS) && input.isKeyDown(input.KEY_RCRTL)) {
 				boxes.add(new Box(Box.Type.GOAL_INNER, i, j, true, true, false, false, 1));
 			}
+			// Create corner inner goal box
+			else if (input.isKeyDown(input.KEY_LEFT_BRACKET) && input.isKeyDown(input.KEY_RCRTL)) {
+				boxes.add(new Box(Box.Type.GOAL_INNER, i, j, true, false, false, true, 1));
+			}
 			// Create 1 sided inner goal box
 			else if (input.isKeyDown(input.KEY_MINUS) && input.isKeyDown(input.KEY_RCRTL)) {
 				boxes.add(new Box(Box.Type.GOAL_INNER, i, j, true, false, false, false, 1));
@@ -109,6 +134,10 @@ public class LevelEditor extends Scene {
 			else if (input.isKeyDown(input.KEY_EQUALS) && input.isKeyDown(input.KEY_RSHIFT)) {
 				boxes.add(new Box(Box.Type.GOAL_OUTER, i, j, true, true, false, false, Box.MAX_SIZE));
 			}
+			// Create corner outer goal box
+			else if (input.isKeyDown(input.KEY_LEFT_BRACKET) && input.isKeyDown(input.KEY_RSHIFT)) {
+				boxes.add(new Box(Box.Type.GOAL_OUTER, i, j, true, false, false, true, Box.MAX_SIZE));
+			}
 			// Create 1 sided outer goal box
 			else if (input.isKeyDown(input.KEY_MINUS) && input.isKeyDown(input.KEY_RSHIFT)) {
 				boxes.add(new Box(Box.Type.GOAL_OUTER, i, j, true, false, false, false, Box.MAX_SIZE));
@@ -120,6 +149,10 @@ public class LevelEditor extends Scene {
 			// Create 2 sided box
 			else if (input.isKeyDown(input.KEY_EQUALS)) {
 				boxes.add(new Box(Box.Type.DEFAULT, i, j, true, true, false, false, 2));
+			}
+			// Create corner box
+			else if (input.isKeyDown(input.KEY_LEFT_BRACKET)) {
+				boxes.add(new Box(Box.Type.DEFAULT, i, j, true, false, false, true, 2));
 			}
 			// Create 1 sided box
 			else if (input.isKeyDown(input.KEY_MINUS)) {
@@ -183,24 +216,29 @@ public class LevelEditor extends Scene {
 		if (key == input.KEY_ESCAPE) {
 			main.setScene(new Title(main));
 		}
-		if (key == input.KEY_R && input.isKeyDown(input.KEY_LCRTL)) {
+		else if (key == input.KEY_TAB) {
+			showKey = !showKey;
+		}
+		else if (key == input.KEY_R && input.isKeyDown(input.KEY_LCRTL)) {
 			start();
 		}
-		if (key == input.KEY_P && input.isKeyDown(input.KEY_LCRTL)) {
+		else if (key == input.KEY_P && input.isKeyDown(input.KEY_LCRTL)) {
 			printMapText();
 		}
-		if (key == input.KEY_SPACE && input.isKeyDown(input.KEY_LCRTL)) {
-			refreshMap();
-			main.addScene(new LevelPreview(main, map));
+		else if (key == input.KEY_C && input.isKeyDown(input.KEY_LCRTL)) {
+			copyMapTextToClipboard();
 		}
-		if (key == input.KEY_PAGEUP) {
+		else if (key == input.KEY_SPACE && input.isKeyDown(input.KEY_LCRTL)) {
+			main.addScene(new LevelPreview(main, testMap()));
+		}
+		else if (key == input.KEY_PAGEUP) {
 			if (input.isKeyDown(input.KEY_LSHIFT)) {
 				removeRows();
 			} else {
 				addRows();
 			}
 		}
-		if (key == input.KEY_PAGEDOWN) {
+		else if (key == input.KEY_PAGEDOWN) {
 			if (input.isKeyDown(input.KEY_LSHIFT)) {
 				removeColumns();
 			} else {
@@ -286,6 +324,13 @@ public class LevelEditor extends Scene {
 		System.out.println("startY = " + player.y()+ ";");
 		System.out.println("tiles = new int[width * height];");
 		System.out.println("for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;");
+		for (int i = 0; i < tiles.length; i ++) {
+			if (tiles[i] != 0) {
+				int x = i % mapWidth;
+				int y = i / mapHeight;
+				System.out.println("tiles[" + y + " * width + " + x + "] = " + tiles[i] + ";");
+			}
+		}
 		System.out.println("boxes = new Box[" + boxes.size() + "];");
 		for (Box box : boxes) {
 			if (box.isGoalInner) {
@@ -345,6 +390,83 @@ public class LevelEditor extends Scene {
 		System.out.println("return new Map(width, height, startX, startY, tiles, boxes, buttons, message);");
 		System.out.println("----------------");
 	}
+	
+	private void copyMapTextToClipboard() {
+		String text = "";
+		text += "width = " + mapWidth + ";\n";
+		text += "height = " + mapHeight + ";\n";
+		text += "startX = " + player.x() + ";\n";
+		text += "startY = " + player.y()+ ";\n";
+		text += "tiles = new int[width * height];\n";
+		text += "for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;\n";
+		for (int i = 0; i < tiles.length; i ++) {
+			if (tiles[i] != 0) {
+				int x = i % mapWidth;
+				int y = i / mapHeight;
+				text += ("tiles[" + y + " * width + " + x + "] = " + tiles[i] + ";\n");
+			}
+		}
+		text += "boxes = new Box[" + boxes.size() + "];\n";
+		for (Box box : boxes) {
+			if (box.isGoalInner) {
+				String line = "boxes[0] = new Box(Box.Type.GOAL_INNER, ";
+				line += box.x() + ", ";
+				line += box.y() + ", ";
+				line += box.solidFrom(0, -1) + ", ";
+				line += box.solidFrom(0, 1) + ", ";
+				line += box.solidFrom(-1, 0) + ", ";
+				line += box.solidFrom(1, 0) + ", ";
+				line += box.size + ");";
+				text += line + "\n";
+			}
+		}
+		for (Box box : boxes) {
+			if (box.isGoalOuter) {
+				String line = "boxes[1] = new Box(Box.Type.GOAL_OUTER, ";
+				line += box.x() + ", ";
+				line += box.y() + ", ";
+				line += box.solidFrom(0, -1) + ", ";
+				line += box.solidFrom(0, 1) + ", ";
+				line += box.solidFrom(-1, 0) + ", ";
+				line += box.solidFrom(1, 0) + ", ";
+				line += box.size + ");";
+				text += line + "\n";
+			}
+		}
+		int n = 2;
+		for (Box box : boxes) {
+			if (!box.isGoalInner && !box.isGoalOuter) {
+				String line = "boxes[" + n + "] = new Box(Box.Type.DEFAULT, ";
+				line += box.x() + ", ";
+				line += box.y() + ", ";
+				line += box.solidFrom(0, -1) + ", ";
+				line += box.solidFrom(0, 1) + ", ";
+				line += box.solidFrom(-1, 0) + ", ";
+				line += box.solidFrom(1, 0) + ", ";
+				line += box.size + ");";
+				text += line + "\n";
+				n ++;
+			}
+		}
+		text += "buttons = new Buttons[" + buttons.size() + "];\n";
+		for (int i = 0; i < buttons.size(); i ++) {
+			if (buttons.get(i).getClass() == RotateButton.class) {
+				RotateButton btn = (RotateButton)buttons.get(i);
+				String line = "buttons[" + i + "] = new RotateButton(";
+				line += btn.x + ", ";
+				line += btn.y + ", ";
+				line += btn.targetX + ", ";
+				line += btn.targetY + ", Map.CIRCLE_RADIUS * 2, tiles, ";
+				line += btn.direction + ");";
+				text += line + "\n";
+			}
+		}
+		text += "message = \"\";\n";
+		text += "return new Map(width, height, startX, startY, tiles, boxes, buttons, message);\n";
+		StringSelection selection = new StringSelection(text);
+	    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+	    clipboard.setContents(selection, selection);
+	}
 
 	@Override
 	public void keyReleased(int key) {}
@@ -359,6 +481,70 @@ public class LevelEditor extends Scene {
 		int my = map.mouseToTileY(input.mouseY());
 		graphics.print("" + mx + ", " + my, 0, 0);
 		graphics.printCentred("Level Editor", 0, 8, 1, window.width());
+		if (showKey) {
+			drawKey();
+		} else {
+			graphics.print("Press [TAB] to show key", 0, 32);
+		}
+		graphics.print("   Press [CTRL] + [C] to copy", window.width() - (8 * 29), 32);
+		graphics.print("the map text to the clipboard", window.width() - (8 * 29), 48);
+		graphics.printCentred("Press [CTRL] + [SPACE] to test the level", 0, 32, 1, window.width());
+	}
+	
+	private void drawKey() {
+		graphics.print("Press [TAB] to hide key", 0, 32);
+		int x = 16;
+		int y = 64;
+		int w = 300;
+		int h = 560;
+		graphics.setColour(255, 255, 255, 192);
+		graphics.rectangle(true, x - 4, y - 4, w, h);
+		graphics.rectangle(true, window.width() - 256 - 4, window.height() - 144 - 4, 256 - 8, 144 - 8);
+		graphics.setColour(0, 0, 0);
+		graphics.rectangle(false, x - 4, y - 4, w, h);
+		graphics.rectangle(false, window.width() - 256 - 4, window.height() - 144 - 4, 256 - 8, 144 - 8);
+		// Tiles
+		graphics.print("Left Mouse Click  + ", x, y);
+		graphics.print("    [0] : Remove tile", x, y + 16 * 1);
+		graphics.print("    [1] : Place solid tile", x, y + 16 * 2);
+		graphics.print("    [2] : Place rotate tile", x, y + 16 * 3);
+		graphics.print("                  (anti-clockwise)", x, y + 16 * 4);
+		graphics.print("    [3] : Place rotate tile ", x, y + 16 * 5);
+		graphics.print("                  (clockwise)", x, y + 16 * 6);
+		// Buttons
+		graphics.print("    [DELETE] : Delete object", x, y + 16 * 9);
+		graphics.print("    [H]      : Place start position", x, y + 16 * 10);
+		// Blue boxes
+		graphics.print("    [RIGHT SHIFT] + ", x, y + 16 * 13);
+		graphics.print("        [-] : Single-sided blue box ", x, y + 16 * 14);
+		graphics.print("        [=] : Double-sided blue box ", x, y + 16 * 15);
+		graphics.print("        [[] : Corner blue box ", x, y + 16 * 16);
+		graphics.print("        []] : Treble-sided blue box ", x, y + 16 * 17);
+		// Red boxes
+		graphics.print("    [RIGHT CTRL] + ", x, y + 16 * 20);
+		graphics.print("        [-] : Single-sided red box ", x, y + 16 * 21);
+		graphics.print("        [=] : Double-sided red box ", x, y + 16 * 22);
+		graphics.print("        [[] : Corner red box ", x, y + 16 * 23);
+		graphics.print("        []] : Treble-sided red box ", x, y + 16 * 24);
+		// Grey boxes
+		graphics.print("    [-] : Single-sided grey box ", x, y + 16 * 27);
+		graphics.print("    [=] : Double-sided grey box ", x, y + 16 * 28);
+		graphics.print("    [[] : Corner grey box ", x, y + 16 * 29);
+		graphics.print("    []] : Treble-sided grey box ", x, y + 16 * 30);
+		// All boxes
+		graphics.print("Middle Mouse Click : Turn box", x, y + 16 * 33);
+		graphics.print("Right Mouse Click : Resize box", x, y + 16 * 34);
+		// Map size
+		x = window.width() - 256;
+		y = window.height() - 144;
+		graphics.print("[PAGEUP]   :", x, y + 16 * 0);
+		graphics.print("        Increase map height", x, y + 16 * 1);
+		graphics.print("[PAGEDOWN] :", x, y + 16 * 2);
+		graphics.print("        Increase map width", x, y + 16 * 3);
+		graphics.print("[LEFT SHIFT] + [PAGEUP]   :", x, y + 16 * 4);
+		graphics.print("        Decrease map height", x, y + 16 * 5);
+		graphics.print("[LEFT SHIFT] + [PAGEDOWN] :", x, y + 16 * 6);
+		graphics.print("        Decrease map width", x, y + 16 * 7);
 	}
 	
 	private Button buttonAt(int x, int y) {
