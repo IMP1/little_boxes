@@ -39,7 +39,7 @@ public class Main implements jog.input.EventHandler {
 	
 	private void start() {
 		score = new Score();
-		graphics.Font font = graphics.newBitmapFont("font.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz1234567890.,_-!?()[]><#~:;/\\^'\"{}£$@@@@@@@@");
+		graphics.Font font = graphics.newBitmapFont("font.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz1234567890.,_-!?()[]><#~:;/\\^'\"{}£$+=@@@@@@@");
 		graphics.setFont(font);
 		setScene(new scn.Title(this));
 	}
