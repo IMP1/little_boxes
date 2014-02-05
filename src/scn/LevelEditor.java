@@ -10,6 +10,7 @@ import cls.Player;
 import cls.RotateButton;
 import jog.graphics;
 import jog.input;
+import jog.window;
 import run.Main;
 
 public class LevelEditor extends Scene {
@@ -50,7 +51,7 @@ public class LevelEditor extends Scene {
 	private void refreshMap() {
 		Box[] bxs = new Box[boxes.size()];
 		Button[] btns = new Button[buttons.size()];
-		map = new Map(mapWidth, mapHeight, player.x(), player.y(), tiles, boxes.toArray(bxs), buttons.toArray(btns), "");
+		map = new Map(mapWidth, mapHeight, player.x(), player.y(), tiles, boxes.toArray(bxs), buttons.toArray(btns), "Level under construction.");
 	}
 
 	@Override
@@ -187,6 +188,10 @@ public class LevelEditor extends Scene {
 		}
 		if (key == input.KEY_P && input.isKeyDown(input.KEY_LCRTL)) {
 			printMapText();
+		}
+		if (key == input.KEY_SPACE && input.isKeyDown(input.KEY_LCRTL)) {
+			refreshMap();
+			main.addScene(new LevelPreview(main, map));
 		}
 		if (key == input.KEY_PAGEUP) {
 			if (input.isKeyDown(input.KEY_LSHIFT)) {
@@ -353,7 +358,7 @@ public class LevelEditor extends Scene {
 		int mx = map.mouseToTileX(input.mouseX());
 		int my = map.mouseToTileY(input.mouseY());
 		graphics.print("" + mx + ", " + my, 0, 0);
-		
+		graphics.printCentred("Level Editor", 0, 8, 1, window.width());
 	}
 	
 	private Button buttonAt(int x, int y) {
