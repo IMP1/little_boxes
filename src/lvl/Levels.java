@@ -91,7 +91,7 @@ public class Levels {
 			tiles = new int[width * height];
 			for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;
 			boxes = new Box[2];
-			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 1, false, false, false, true, 1);
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 1, true, false, true, true, 1);
 			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 2, true, true, false, true, 4);
 			buttons = new Button[0];
 			message = "THe blue box can be moved like all the others.";
