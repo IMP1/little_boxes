@@ -373,7 +373,7 @@ public class LevelEditor extends Scene {
 				n ++;
 			}
 		}
-		System.out.println("buttons = new Buttons[" + buttons.size() + "];");
+		System.out.println("buttons = new Button[" + buttons.size() + "];");
 		for (int i = 0; i < buttons.size(); i ++) {
 			if (buttons.get(i).getClass() == RotateButton.class) {
 				RotateButton btn = (RotateButton)buttons.get(i);
@@ -448,7 +448,7 @@ public class LevelEditor extends Scene {
 				n ++;
 			}
 		}
-		text += "buttons = new Buttons[" + buttons.size() + "];\n";
+		text += "buttons = new Button[" + buttons.size() + "];\n";
 		for (int i = 0; i < buttons.size(); i ++) {
 			if (buttons.get(i).getClass() == RotateButton.class) {
 				RotateButton btn = (RotateButton)buttons.get(i);
