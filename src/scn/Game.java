@@ -62,7 +62,7 @@ public class Game extends Scene {
 		if (key == input.KEY_MINUS && currentLevel > 1) {
 			loadMap(currentLevel - 1);
 		}
-		if (key == input.KEY_PLUS && currentLevel < main.score.levelUpTo()) {
+		if (key == input.KEY_EQUALS && currentLevel < main.score.levelUpTo()) {
 			loadMap(currentLevel + 1);
 		}
 		
