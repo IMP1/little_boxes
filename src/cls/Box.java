@@ -94,6 +94,8 @@ public class Box {
 		graphics.setColour(colourRed, colourGreen, colourBlue);
 		drawLines(centreX, centreY, w, h, 0);
 		drawLines(centreX, centreY, w, h, 1);
+		graphics.setColour(32, 32, 32);
+		drawLines(centreX, centreY, w, h, 2);
 	}
 	
 	private void drawLines(double centreX, double centreY, double width, double height, int distance) {
