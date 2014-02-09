@@ -66,7 +66,7 @@ public class Levels {
 			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 2, false, true, true, true, 1);
 			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 1, false, true, true, true, Box.MAX_SIZE);
 			boxes[2] = new Box(Box.Type.DEFAULT, 4, 0, true, true, false, true, 2 );
-			message = "You can move boxes in other boxes.";
+			message = "You can move smaller boxes inside larger boxes.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
 			
 		case 5:
@@ -84,6 +84,20 @@ public class Levels {
 			return new Map(width, height, startX, startY, tiles, boxes, message);
 			
 		case 6:
+			width = 3;
+			height = 3;
+			startX = 1;
+			startY = 0;
+			tiles = new int[width * height];
+			for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;
+			boxes = new Box[2];
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 1, true, false, true, true, 1);
+			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 2, true, true, false, true, 4);
+			buttons = new Button[0];
+			message = "THe blue box can be moved like all the others.";
+			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
+			
+		case 7:
 			width = 5;
 			height = 3;
 			startX = 0;
@@ -97,7 +111,7 @@ public class Levels {
 			message = "Some boxes have fewer than 3 edges.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
 		
-		case 7:
+		case 8:
 			width = 5;
 			height = 5;
 			startX = 0;
@@ -117,7 +131,7 @@ public class Levels {
 			message = "Some levels are harder than others.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
 			
-		case 8:
+		case 9:
 			width = 5;
 			height = 5;
 			startX = 0;
