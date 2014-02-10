@@ -3,16 +3,18 @@ package scn;
 import java.util.ArrayList;
 
 import jog.*;
-import lvl.Levels;
+import lvl.LevelLoader;
 import cls.*;
 import run.Main;
 
 public class Game extends Scene {
 	
+	private final static audio.Sound SUCCESS_SOUND = audio.newSoundEffect("success.ogg");
+	
 	private Map map;
 	private boolean winState;
 	private Player player;
-	private int currentLevel;
+	private int currentLevel;	
 //	private audio.Music music;
 	private ArrayList<LevelSolution.Action> actions;
 
@@ -30,7 +32,7 @@ public class Game extends Scene {
 	
 	private void loadMap(int id) {
 		currentLevel = id;
-		map = Levels.loadLevel(id);
+		map = LevelLoader.loadLevel(id);
 		player.setPosition(map.playerStartX, map.playerStartY);
 		winState = false;
 		actions = new ArrayList<LevelSolution.Action>();
@@ -48,7 +50,7 @@ public class Game extends Scene {
 			main.setScene(new Title(main));
 		}
 		if (key == input.KEY_SPACE && winState) {
-			if (currentLevel < Levels.LEVEL_COUNT) {
+			if (currentLevel < LevelLoader.LEVEL_COUNT) {
 				LevelSolution solution = new LevelSolution(actions.toArray(new LevelSolution.Action[1]));
 				main.score.completeLevel(currentLevel, solution);
 				loadMap(currentLevel + 1);
@@ -100,6 +102,9 @@ public class Game extends Scene {
 		}
 		
 		checkWinState();
+		if (winState) {
+			SUCCESS_SOUND.play();
+		}
 	}
 	
 	private boolean playerCanMove(int dx, int dy) {
@@ -146,7 +151,7 @@ public class Game extends Scene {
 	@Override
 	public void draw() {
 		map.draw(player);
-		if (winState && currentLevel < Levels.LEVEL_COUNT) {
+		if (winState && currentLevel < LevelLoader.LEVEL_COUNT) {
 			graphics.printCentred("Level " + currentLevel + " cleared!", 0, 32, 1, window.width());
 			graphics.printCentred("Press [SPACE] to advance.", 0, 48, 1, window.width());
 		} else if (winState) {
