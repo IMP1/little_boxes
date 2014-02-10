@@ -1,6 +1,6 @@
 package cls;
 
-import lvl.Levels;
+import lvl.LevelLoader;
 
 public class Score {
 	
@@ -10,10 +10,10 @@ public class Score {
 	public Score() {
 		
 		// TODO change to 1
-		levelUpTo = Levels.LEVEL_COUNT;
+		levelUpTo = LevelLoader.LEVEL_COUNT;
 		levelUpTo = 1;
 		
-		solutions = new LevelSolution[Levels.LEVEL_COUNT];
+		solutions = new LevelSolution[LevelLoader.LEVEL_COUNT];
 		for (int i = 0; i < solutions.length; i ++) {
 			solutions[i] = null;
 		}
