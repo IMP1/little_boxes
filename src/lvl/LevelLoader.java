@@ -5,8 +5,8 @@ import cls.Map;
 import cls.Box;
 import cls.RotateButton;
 
-public class Levels {
-
+public class LevelLoader {
+	
 	public static Map loadLevel(int id) {
 		int width, height, startX, startY;
 		int[] tiles;
@@ -94,7 +94,7 @@ public class Levels {
 			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 1, true, false, true, true, 1);
 			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 2, true, true, false, true, 4);
 			buttons = new Button[0];
-			message = "THe blue box can be moved like all the others.";
+			message = "The blue box can be moved like all the others.";
 			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
 			
 		case 7:
