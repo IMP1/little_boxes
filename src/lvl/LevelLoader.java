@@ -133,19 +133,22 @@ public class LevelLoader {
 			
 		case 9:
 			width = 5;
-			height = 5;
+			height = 3;
 			startX = 0;
 			startY = 0;
 			tiles = new int[width * height];
 			for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;
-			tiles[2 * width + 3] = 2;
-			boxes = new Box[2];
-			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 4, false, false, false, true, 1);
-			boxes[1] = new Box(Box.Type.GOAL_OUTER, 3, 3, true, true, true, false, Box.MAX_SIZE);
-			buttons = new Button[1];
-			buttons[0] = new RotateButton(1, 1, 3, 2, Map.CIRCLE_RADIUS * 2, tiles, 1);
-			message = "Moving onto a button can activate certain tiles, such as rotating ones.";
+			tiles[0 * width + 2] = 2;
+			tiles[1 * width + 2] = 2;
+			tiles[2 * width + 2] = 2;
+			boxes = new Box[3];
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 3, 1, true, true, true, false, 1);
+			boxes[1] = new Box(Box.Type.GOAL_OUTER, 0, 2, true, true, true, false, 4);
+			boxes[2] = new Box(Box.Type.DEFAULT, 1, 0, false, false, false, true, 2);
+			buttons = new Button[0];
+			message = "";
 			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
+
 
 		default:
 			throw new IndexOutOfBoundsException("There is no map with the id " + id + ".");
@@ -153,6 +156,6 @@ public class LevelLoader {
 		}
 	}
 	
-	public final static int LEVEL_COUNT = 8;
+	public final static int LEVEL_COUNT = 9;
 	
 }
