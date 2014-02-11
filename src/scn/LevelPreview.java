@@ -80,11 +80,16 @@ public class LevelPreview extends Game {
 		int newX = player.x() + dx;
 		int newY = player.y() + dy;
 		// Not in map
-		if (!map.passable(newX, newY)) return false;
+		if (!map.passable(newX, newY)) {
+			return false;
+		}
+		// Find smallest box we're in
 		Box boxIn = null;
 		for (Box box : map.boxes) {
 			if (box.x() == player.x() && box.y() == player.y()) {
-				boxIn = box;
+				if (boxIn == null || box.size < boxIn.size ) {
+					boxIn = box;
+				}
 			}
 		}
 		for (Box box : map.boxes) {
@@ -96,6 +101,16 @@ public class LevelPreview extends Game {
 			if (boxIn != null && box.x() == newX && box.y() == newY && boxIn.size > box.size && boxIn.solidFrom(dx, dy)) {
 				return false;
 			}
+		}
+		if (map.tileAt(newX, newY) == 2) {
+			// Will we be in a box
+			boolean boxWith = false;
+			for (Box box : map.boxes) {
+				if (box.x() == player.x() && box.y() == player.y() && box.solidFrom(dx, dy)) {
+					boxWith = true;
+				}
+			}
+			if (!boxWith) return false;
 		}
 		return true;
 	}
