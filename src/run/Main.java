@@ -1,5 +1,7 @@
 package run;
 
+import java.io.File;
+
 import org.lwjgl.Sys;
 
 import cls.Score;
@@ -15,6 +17,11 @@ public class Main implements jog.input.EventHandler {
 	final private String TITLE = "Little Boxes";
 	final private int WIDTH = 960;
 	final private int HEIGHT = 640;
+	final private String[] ICONS = {
+		"icon16.png", // 16
+		"icon32.png", // 32
+		"icon64.png", // 64
+	};
 	
 	private double lastFrameTime;
 	private double dt;
@@ -26,6 +33,7 @@ public class Main implements jog.input.EventHandler {
 	public Main() {
 		lastFrameTime = (double)(Sys.getTime()) / Sys.getTimerResolution();
 		window.initialise(TITLE, WIDTH, HEIGHT);
+		window.setIcon(ICONS);
 		graphics.initialise();
 		sceneStack = new java.util.Stack<scn.Scene>();
 		start();
