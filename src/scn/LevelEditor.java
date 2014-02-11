@@ -402,7 +402,7 @@ public class LevelEditor extends Scene {
 		for (int i = 0; i < tiles.length; i ++) {
 			if (tiles[i] != 0) {
 				int x = i % mapWidth;
-				int y = i / mapHeight;
+				int y = i / mapWidth;
 				text += ("tiles[" + y + " * width + " + x + "] = " + tiles[i] + ";\n");
 			}
 		}
@@ -479,7 +479,13 @@ public class LevelEditor extends Scene {
 		map.draw(player);
 		int mx = map.mouseToTileX(input.mouseX());
 		int my = map.mouseToTileY(input.mouseY());
-		graphics.print("" + mx + ", " + my, 0, 0);
+		int t;
+		try {
+			t = map.tileAt(mx, my);
+		} catch (IndexOutOfBoundsException e) {
+			t = -1;
+		}
+		graphics.print("(" + mx + ", " + my + ") = " + t, 0, 0);
 		graphics.printCentred("Level Editor", 0, 8, 1, window.width());
 		if (showKey) {
 			drawKey();
