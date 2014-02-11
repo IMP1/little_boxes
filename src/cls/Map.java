@@ -8,6 +8,16 @@ public class Map {
 	public final static int TILE_SIZE = 64;
 	public final static int CIRCLE_RADIUS = TILE_SIZE / 4;
 
+	private final static int BOB_HEIGHT = 4;
+	private final static int BOB_SPEED = 2;
+
+	/* Tiles
+		0 = empty
+		1 = solid
+		2 = water
+		
+	*/
+
 	public final int width;
 	public final int height;
 	public final int playerStartX;
@@ -16,6 +26,8 @@ public class Map {
 	public final Box[] boxes;
 	public final Button[] buttons;
 	public final String message;
+	
+	private double bobTimer;
 	
 	public Map(int width, int height, int startX, int startY, int[] tiles, Box[] boxes, Button[] buttons, String message) {
 		this.width = width;
@@ -44,6 +56,11 @@ public class Map {
 		return tiles[y * width + x] != 1;
 	}
 	
+	public int tileAt(int x, int y) {
+		if (x < 0 || y < 0 || x >= width || y >= height) throw new IndexOutOfBoundsException("Invalid co-ordinates: " + x + ", " + y + ".");
+		return tiles[y * width + x];
+	}
+	
 	public int mouseToTileX(int mx) { 
 		int centreX = (window.width() - (width * TILE_SIZE)) / 2;
 		return (mx - centreX) / TILE_SIZE;
@@ -52,6 +69,10 @@ public class Map {
 	public int mouseToTileY(int my) { 
 		int centreY = (window.height() - (height * TILE_SIZE)) / 2;
 		return (my - centreY) / TILE_SIZE;
+	}
+	
+	public void update(double dt, Player player) {
+		bobTimer += dt * BOB_SPEED;
 	}
 
 	public void draw(Player player) {
@@ -64,20 +85,35 @@ public class Map {
 			int y = i / width;
 			drawTile(tiles[i], x * TILE_SIZE, y * TILE_SIZE);
 		}
-		for (Box box : boxes) box.draw();
 		for (Button button : buttons) button.draw();
+		double bob = BOB_HEIGHT * Math.sin(bobTimer);
+		for (Box box : boxes) {
+			if (tileAt(box.x(), box.y()) == 2) {
+				box.draw(0, bob);
+			} else {
+				box.draw();
+			}
+		}
+		if (tileAt(player.x(), player.y()) == 2) {
+			graphics.push();
+			graphics.translate(0, bob);
+		}
 		player.draw();
+		if (tileAt(player.x(), player.y()) == 2) {
+			graphics.pop();
+		}
 		graphics.pop();
 		graphics.printCentred(message, 0, window.height() - 64, 1, window.width());
 	}
 	
 	private void drawTile(int tile, int x, int y) {
-		if (tile == 0 || tile == 2 || tile == 3) graphics.setColour(128, 192, 192);
+		if (tile == 0 || tile == 3 || tile == 4) graphics.setColour(128, 192, 192);
 		if (tile == 1) graphics.setColour(64, 64, 64);
+		if (tile == 2) graphics.setColour(128, 192, 256);
 		graphics.rectangle(true, x, y, TILE_SIZE, TILE_SIZE);
 		graphics.setColour(64, 64, 64);
 		graphics.rectangle(false, x, y, TILE_SIZE, TILE_SIZE);
-		if (tile == 2 || tile == 3) {
+		if (tile == 3 || tile == 3) {
 			int circleX = x + TILE_SIZE/2;
 			int circleY = y + TILE_SIZE/2;
 			int arrowRadius = CIRCLE_RADIUS * 2 / 3;

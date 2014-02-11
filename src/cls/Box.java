@@ -84,7 +84,9 @@ public class Box {
 		turnBy(-1);
 	}
 	
-	public void draw() {
+	public void draw(double offsetX, double offsetY) {
+		graphics.push();
+		graphics.translate(offsetX, offsetY);
 		double centreX = (x + 0.5) * Map.TILE_SIZE;
 		double centreY = (y + 0.5) * Map.TILE_SIZE;
 		double w = (Map.TILE_SIZE * 0.4) + (size * SIZE_MULTIPLIER);
@@ -96,7 +98,9 @@ public class Box {
 		drawLines(centreX, centreY, w, h, 1);
 		graphics.setColour(32, 32, 32);
 		drawLines(centreX, centreY, w, h, 2);
+		graphics.pop();
 	}
+	public void draw() { draw(0, 0); }
 	
 	private void drawLines(double centreX, double centreY, double width, double height, int distance) {
 		double w = width + (distance * 2);
