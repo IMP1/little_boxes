@@ -1,9 +1,6 @@
 package lvl;
 
-import cls.Button;
-import cls.Map;
-import cls.Box;
-import cls.RotateButton;
+import cls.*;
 
 public class LevelLoader {
 	
