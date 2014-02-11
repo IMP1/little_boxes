@@ -146,7 +146,7 @@ public class LevelLoader {
 			boxes[1] = new Box(Box.Type.GOAL_OUTER, 0, 2, true, true, true, false, 4);
 			boxes[2] = new Box(Box.Type.DEFAULT, 1, 0, false, false, false, true, 2);
 			buttons = new Button[0];
-			message = "";
+			message = "Unfortunately you can't float. But boxes can.";
 			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
 
 
