@@ -145,7 +145,7 @@ public class Game extends Scene {
 				return false;
 			}
 			// Smaller box in the way
-			if (boxIn != null && box.x() == newX && box.y() == newY && boxIn.size > box.size && boxIn.solidFrom(dx, dy)) {
+			if (boxIn != null && box.x() == newX && box.y() == newY && box.size <= boxIn.size && boxIn.solidFrom(dx, dy)) {
 				return false;
 			}
 		}
