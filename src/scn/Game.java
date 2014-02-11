@@ -11,12 +11,12 @@ public class Game extends Scene {
 	
 	private final static audio.Sound SUCCESS_SOUND = audio.newSoundEffect("success.ogg");
 	
-	private Map map;
-	private boolean winState;
-	private Player player;
-	private int currentLevel;	
+	protected Map map;
+	protected boolean winState;
+	protected Player player;
+	protected int currentLevel;	
 //	private audio.Music music;
-	private ArrayList<LevelSolution.Action> actions;
+	protected ArrayList<LevelSolution.Action> actions;
 
 	public Game(Main main) {
 		super(main);
@@ -102,10 +102,12 @@ public class Game extends Scene {
 		if (dx == 0 && dy == 0) return;
 		
 		// Log action
-		if (dy < 0) actions.add(LevelSolution.Action.UP);
-		if (dy > 0) actions.add(LevelSolution.Action.DOWN);
-		if (dx < 0) actions.add(LevelSolution.Action.LEFT);
-		if (dx > 0) actions.add(LevelSolution.Action.RIGHT);
+		if (actions != null) {
+			if (dy < 0) actions.add(LevelSolution.Action.UP);
+			if (dy > 0) actions.add(LevelSolution.Action.DOWN);
+			if (dx < 0) actions.add(LevelSolution.Action.LEFT);
+			if (dx > 0) actions.add(LevelSolution.Action.RIGHT);
+		}
 
 		// Press buttons we've moved onto
 		for (Button button : map.buttons) {
