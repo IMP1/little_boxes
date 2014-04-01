@@ -23,7 +23,7 @@ public class LevelEditor extends Scene {
 	
 	private int mapWidth;
 	private int mapHeight;
-	private int[] tiles;
+	private Map.Tile[] tiles;
 	private ArrayList<Box> boxes;
 	private ArrayList<Button> buttons;
 	
@@ -46,8 +46,8 @@ public class LevelEditor extends Scene {
 		mapHeight = 5;
 		boxes = new ArrayList<Box>();
 		buttons = new ArrayList<Button>();
-		tiles = new int[mapWidth * mapHeight];
-		for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;
+		tiles = new Map.Tile[mapWidth * mapHeight];
+		for (int i = 0; i < tiles.length; i ++) tiles[i] = Map.Tile.EMPTY;
 		player = new Player();
 		player.setPosition(0, 0);
 		refreshMap();
@@ -82,18 +82,15 @@ public class LevelEditor extends Scene {
 			int j = map.mouseToTileY(my);
 			// Place empty tiles
 			if (input.isKeyDown(input.KEY_BACKTICK) || input.isKeyDown(input.KEY_0)) {
-				tiles[j * mapWidth + i] = 0;
+				tiles[j * mapWidth + i] = Map.Tile.EMPTY;
 			} 
 			// Place solid tiles
 			else if (input.isKeyDown(input.KEY_1)) {
-				tiles[j * mapWidth + i] = 1;
+				tiles[j * mapWidth + i] = Map.Tile.SOLID;
 			}
-			// Place rotating tiles
+			// Place water tiles
 			else if (input.isKeyDown(input.KEY_2)) {
-				tiles[j * mapWidth + i] = 2;
-			}
-			else if (input.isKeyDown(input.KEY_3)) {
-				tiles[j * mapWidth + i] = 3;
+				tiles[j * mapWidth + i] = Map.Tile.WATER;
 			}
 			// Place starting position
 			else if (input.isKeyDown(input.KEY_H)) {
@@ -196,20 +193,7 @@ public class LevelEditor extends Scene {
 	}
 
 	@Override
-	public void mouseReleased(int key, int mx, int my) {
-		if (key == input.MOUSE_LEFT && dragX > -1 && dragY > -1) {
-			int i = map.mouseToTileX(mx);
-			int j = map.mouseToTileY(my);
-			if (dragButtonType == RotateButton.class) {
-				Button btn = new RotateButton(dragX, dragY, i, j, 0, tiles, 1);
-				buttons.add(btn);
-				dragButtonType = null;
-				dragX = -1;
-				dragY = -1;
-				refreshMap();
-			}
-		}
-	}
+	public void mouseReleased(int key, int mx, int my) {}
 
 	@Override
 	public void keyPressed(int key) {
@@ -251,9 +235,9 @@ public class LevelEditor extends Scene {
 		if (mapWidth + 2 > MAX_COLUMNS) return;
 		int oldWidth = mapWidth;
 		mapWidth += 2;
-		int[] newTiles = new int[mapWidth * mapHeight];
+		Map.Tile[] newTiles = new Map.Tile[mapWidth * mapHeight];
 		// Pad 0s
-		for (int i = 0; i < newTiles.length; i ++) newTiles[i] = 0;
+		for (int i = 0; i < newTiles.length; i ++) newTiles[i] = Map.Tile.EMPTY;
 		// Copy old tiles
 		for (int i = 0; i < tiles.length; i ++) {
 			int id = i + 1 + 2 * (i / oldWidth);
@@ -268,9 +252,9 @@ public class LevelEditor extends Scene {
 	private void addRows() {
 		if (mapHeight + 2 > MAX_ROWS) return;
 		mapHeight += 2;
-		int[] newTiles = new int[mapWidth * mapHeight];
+		Map.Tile[] newTiles = new Map.Tile[mapWidth * mapHeight];
 		// Pad 0s
-		for (int i = 0; i < newTiles.length; i ++) newTiles[i] = 0;
+		for (int i = 0; i < newTiles.length; i ++) newTiles[i] = Map.Tile.EMPTY;
 		// Copy old tiles
 		for (int i = 0; i < tiles.length; i ++) {
 			int id = mapWidth + i;
@@ -285,7 +269,7 @@ public class LevelEditor extends Scene {
 	private void removeColumns() {
 		if (mapWidth < 2) return;
 		mapWidth -= 2;
-		int[] newTiles = new int[mapWidth * mapHeight];
+		Map.Tile[] newTiles = new Map.Tile[mapWidth * mapHeight];
 		// Copy old tiles
 		for (int i = 0; i < mapWidth * mapHeight; i ++) {
 			int id = i + 1 + 2 * (i / mapWidth);
@@ -300,7 +284,7 @@ public class LevelEditor extends Scene {
 	private void removeRows() {
 		if (mapHeight < 2) return;
 		mapHeight -= 2;
-		int[] newTiles = new int[mapWidth * mapHeight];
+		Map.Tile[] newTiles = new Map.Tile[mapWidth * mapHeight];
 		// Copy old tiles
 		for (int i = 0; i < mapWidth * mapHeight; i ++) {
 			int id = mapWidth + i;
@@ -322,13 +306,13 @@ public class LevelEditor extends Scene {
 		System.out.println("height = " + mapHeight + ";");
 		System.out.println("startX = " + player.x() + ";");
 		System.out.println("startY = " + player.y()+ ";");
-		System.out.println("tiles = new int[width * height];");
-		System.out.println("for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;");
+		System.out.println("tiles = new Map.Tile[width * height];");
+		System.out.println("for (int i = 0; i < tiles.length; i ++) tiles[i] = Map.Tile.EMPTY;");
 		for (int i = 0; i < tiles.length; i ++) {
-			if (tiles[i] != 0) {
+			if (tiles[i] != Map.Tile.EMPTY) {
 				int x = i % mapWidth;
 				int y = i / mapHeight;
-				System.out.println("tiles[" + y + " * width + " + x + "] = " + tiles[i] + ";");
+				System.out.println("tiles[" + y + " * width + " + x + "] = Map.Tile." + tiles[i] + ";");
 			}
 		}
 		System.out.println("boxes = new Box[" + boxes.size() + "];");
@@ -397,13 +381,13 @@ public class LevelEditor extends Scene {
 		text += "height = " + mapHeight + ";\n";
 		text += "startX = " + player.x() + ";\n";
 		text += "startY = " + player.y()+ ";\n";
-		text += "tiles = new int[width * height];\n";
-		text += "for (int i = 0; i < tiles.length; i ++) tiles[i] = 0;\n";
+		text += "tiles = new Map.Tile[width * height];\n";
+		text += "for (int i = 0; i < tiles.length; i ++) tiles[i] = Map.Tile.EMPTY;\n";
 		for (int i = 0; i < tiles.length; i ++) {
-			if (tiles[i] != 0) {
+			if (tiles[i] != Map.Tile.EMPTY) {
 				int x = i % mapWidth;
 				int y = i / mapWidth;
-				text += ("tiles[" + y + " * width + " + x + "] = " + tiles[i] + ";\n");
+				text += ("tiles[" + y + " * width + " + x + "] = Map.Tile." + tiles[i] + ";\n");
 			}
 		}
 		text += "boxes = new Box[" + boxes.size() + "];\n";
@@ -479,13 +463,11 @@ public class LevelEditor extends Scene {
 		map.draw(player);
 		int mx = map.mouseToTileX(input.mouseX());
 		int my = map.mouseToTileY(input.mouseY());
-		int t;
+		Map.Tile t;
 		try {
 			t = map.tileAt(mx, my);
-		} catch (IndexOutOfBoundsException e) {
-			t = -1;
-		}
-		graphics.print("(" + mx + ", " + my + ") = " + t, 0, 0);
+			graphics.print("(" + mx + ", " + my + ") = " + t, 0, 0);
+		} catch (IndexOutOfBoundsException e) {}
 		graphics.printCentred("Level Editor", 0, 8, 1, window.width());
 		if (showKey) {
 			drawKey();

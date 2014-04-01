@@ -5,6 +5,12 @@ import jog.window;
 
 public class Map {
 	
+	public enum Tile {
+		EMPTY,
+		SOLID,
+		WATER,
+	}
+	
 	public final static int TILE_SIZE = 64;
 	public final static int CIRCLE_RADIUS = TILE_SIZE / 4;
 
@@ -22,14 +28,14 @@ public class Map {
 	public final int height;
 	public final int playerStartX;
 	public final int playerStartY;
-	public final int[] tiles;
+	public final Tile[] tiles;
 	public final Box[] boxes;
 	public final Button[] buttons;
 	public final String message;
 	
 	private double bobTimer;
 	
-	public Map(int width, int height, int startX, int startY, int[] tiles, Box[] boxes, Button[] buttons, String message) {
+	public Map(int width, int height, int startX, int startY, Tile[] tiles, Box[] boxes, Button[] buttons, String message) {
 		this.width = width;
 		this.height = height;
 		this.tiles = tiles;
@@ -40,23 +46,16 @@ public class Map {
 		this.buttons = buttons;
 	}
 	
-	public Map(int width, int height, int startX, int startY, int[] tiles, Box[] boxes, String message) {
-		this.width = width;
-		this.height = height;
-		this.tiles = tiles;
-		this.boxes = boxes;
-		this.playerStartX = startX;
-		this.playerStartY = startY;
-		this.message = message;
-		this.buttons = new Button[0];
+	public Map(int width, int height, int startX, int startY, Tile[] tiles, Box[] boxes, String message) {
+		this(width, height, startX, startY, tiles, boxes, new Button[0], message);
 	}
 	
 	public boolean passable(int x, int y) {
 		if (x < 0 || y < 0 || x >= width || y >= height) return false;
-		return tiles[y * width + x] != 1;
+		return tiles[y * width + x] != Tile.SOLID;
 	}
 	
-	public int tileAt(int x, int y) {
+	public Tile tileAt(int x, int y) {
 		if (x < 0 || y < 0 || x >= width || y >= height) throw new IndexOutOfBoundsException("Invalid co-ordinates: " + x + ", " + y + ".");
 		return tiles[y * width + x];
 	}
@@ -88,45 +87,31 @@ public class Map {
 		for (Button button : buttons) button.draw();
 		double bob = BOB_HEIGHT * Math.sin(bobTimer);
 		for (Box box : boxes) {
-			if (tileAt(box.x(), box.y()) == 2) {
+			if (tileAt(box.x(), box.y()) == Tile.WATER) {
 				box.draw(0, bob);
 			} else {
 				box.draw();
 			}
 		}
-		if (tileAt(player.x(), player.y()) == 2) {
+		if (tileAt(player.x(), player.y()) == Tile.WATER) {
 			graphics.push();
 			graphics.translate(0, bob);
 		}
 		player.draw();
-		if (tileAt(player.x(), player.y()) == 2) {
+		if (tileAt(player.x(), player.y()) == Tile.WATER) {
 			graphics.pop();
 		}
 		graphics.pop();
 		graphics.printCentred(message, 0, window.height() - 64, 1, window.width());
 	}
 	
-	private void drawTile(int tile, int x, int y) {
-		if (tile == 0 || tile == 3 || tile == 4) graphics.setColour(128, 192, 192);
-		if (tile == 1) graphics.setColour(64, 64, 64);
-		if (tile == 2) graphics.setColour(128, 192, 256);
+	private void drawTile(Tile tile, int x, int y) {
+		if (tile == Tile.EMPTY) graphics.setColour(128, 192, 192);
+		if (tile == Tile.SOLID) graphics.setColour(64, 64, 64);
+		if (tile == Tile.WATER) graphics.setColour(128, 192, 256);
 		graphics.rectangle(true, x, y, TILE_SIZE, TILE_SIZE);
 		graphics.setColour(64, 64, 64);
 		graphics.rectangle(false, x, y, TILE_SIZE, TILE_SIZE);
-		if (tile == 3 || tile == 3) {
-			int circleX = x + TILE_SIZE/2;
-			int circleY = y + TILE_SIZE/2;
-			int arrowRadius = CIRCLE_RADIUS * 2 / 3;
-			graphics.setColour(64, 64, 64, 192);
-			graphics.circle(true, circleX, circleY, CIRCLE_RADIUS);
-			double arcLength =  Math.PI * 3 / 2;
-			graphics.setColour(255, 255, 255);
-			graphics.arc(false, circleX, circleY, arrowRadius, Math.PI/2, (tile == 2) ? arcLength : -arcLength );
-			int tx = x + TILE_SIZE/2 + ( (tile == 2) ? arrowRadius : -arrowRadius );
-			int ty = y + TILE_SIZE/2;
-			graphics.triangle(false, tx-4, ty, tx, ty-6, tx+4, ty);
-		}
-		
 	}
 
 }
