@@ -1,11 +1,8 @@
 package run;
 
-import java.io.File;
-
 import org.lwjgl.Sys;
 
 import cls.Score;
-
 import jog.*;
 
 public class Main implements jog.input.EventHandler {

@@ -61,10 +61,10 @@ public class LevelLoader {
 			tiles = new Map.Tile[width * height];
 			for (int i = 0; i < tiles.length; i ++) tiles[i] = Tile.EMPTY;
 			boxes = new Box[3];
-			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 2, false, true, true, true, 1);
-			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 1, false, true, true, true, Box.MAX_SIZE);
-			boxes[2] = new Box(Box.Type.DEFAULT, 4, 0, true, true, false, true, 2 );
-			message = "You can move smaller boxes inside larger boxes.";
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 4, 0, true, true, false, true, 1);
+			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 2, true, true, true, false, Box.MAX_SIZE);
+			boxes[2] = new Box(Box.Type.DEFAULT, 0, 1, false, true, true, true, 2 );
+			message = "Other boxes can end up in the blue box along with the red one.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
 			
 		case 5:
@@ -75,12 +75,12 @@ public class LevelLoader {
 			tiles = new Map.Tile[width * height];
 			for (int i = 0; i < tiles.length; i ++) tiles[i] = Tile.EMPTY;
 			boxes = new Box[3];
-			boxes[0] = new Box(Box.Type.GOAL_INNER, 4, 0, true, true, false, true, 1);
-			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 2, true, true, true, false, Box.MAX_SIZE);
-			boxes[2] = new Box(Box.Type.DEFAULT, 0, 1, false, true, true, true, 2 );
-			message = "Other boxes can end up in the blue box along with the red one.";
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 0, 2, false, true, true, true, 1);
+			boxes[1] = new Box(Box.Type.GOAL_OUTER, 2, 1, false, true, true, true, Box.MAX_SIZE);
+			boxes[2] = new Box(Box.Type.DEFAULT, 4, 0, true, true, false, true, 2 );
+			message = "But only the red is necessary.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
-			
+		
 		case 6:
 			width = 3;
 			height = 3;
@@ -108,8 +108,26 @@ public class LevelLoader {
 			boxes[2] = new Box(Box.Type.DEFAULT, 0, 1, false, false, true, true, 2 );
 			message = "Some boxes have fewer than 3 edges.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
-		
+
 		case 8:
+			width = 5;
+			height = 3;
+			startX = 0;
+			startY = 0;
+			tiles = new Map.Tile[width * height];
+			for (int i = 0; i < tiles.length; i ++) tiles[i] = Tile.EMPTY;
+			tiles[0 * width + 2] = Tile.WATER;
+			tiles[1 * width + 2] = Tile.WATER;
+			tiles[2 * width + 2] = Tile.WATER;
+			boxes = new Box[3];
+			boxes[0] = new Box(Box.Type.GOAL_INNER, 3, 1, true, true, true, false, 1);
+			boxes[1] = new Box(Box.Type.GOAL_OUTER, 0, 2, true, true, true, false, 4);
+			boxes[2] = new Box(Box.Type.DEFAULT, 1, 0, false, false, false, true, 2);
+			buttons = new Button[0];
+			message = "Unfortunately you can't float. But boxes can.";
+			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
+			
+		case 9:
 			width = 5;
 			height = 5;
 			startX = 0;
@@ -128,25 +146,6 @@ public class LevelLoader {
 			boxes[3] = new Box(Box.Type.DEFAULT, 4, 4, true, true, false, true, 3);
 			message = "Some levels are harder than others.";
 			return new Map(width, height, startX, startY, tiles, boxes, message);
-			
-		case 9:
-			width = 5;
-			height = 3;
-			startX = 0;
-			startY = 0;
-			tiles = new Map.Tile[width * height];
-			for (int i = 0; i < tiles.length; i ++) tiles[i] = Tile.EMPTY;
-			tiles[0 * width + 2] = Tile.WATER;
-			tiles[1 * width + 2] = Tile.WATER;
-			tiles[2 * width + 2] = Tile.WATER;
-			boxes = new Box[3];
-			boxes[0] = new Box(Box.Type.GOAL_INNER, 3, 1, true, true, true, false, 1);
-			boxes[1] = new Box(Box.Type.GOAL_OUTER, 0, 2, true, true, true, false, 4);
-			boxes[2] = new Box(Box.Type.DEFAULT, 1, 0, false, false, false, true, 2);
-			buttons = new Button[0];
-			message = "Unfortunately you can't float. But boxes can.";
-			return new Map(width, height, startX, startY, tiles, boxes, buttons, message);
-
 
 		default:
 			throw new IndexOutOfBoundsException("There is no map with the id " + id + ".");
