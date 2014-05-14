@@ -149,7 +149,7 @@ public class Game extends Scene {
 				return false;
 			}
 		}
-		if (map.tileAt(newX, newY) == 2) {
+		if (map.tileAt(newX, newY) == Map.Tile.WATER) {
 			// Will we be in a box
 			boolean boxWith = false;
 			boolean boxThere = false;

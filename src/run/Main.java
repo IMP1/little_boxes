@@ -1,7 +1,6 @@
 package run;
 
 import cls.Score;
-
 import jog.*;
 import jog.input.InputEventHandler;
 

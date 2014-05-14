@@ -6,8 +6,6 @@ import cls.Player;
 import run.Main;
 
 public class LevelPreview extends Game {
-
-	private boolean winState;
 	
 	public LevelPreview(Main main, Map map) {
 		super(main);
