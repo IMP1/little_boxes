@@ -9,7 +9,7 @@ import run.Main;
 
 public class Game extends Scene {
 	
-	private final static audio.Sound SUCCESS_SOUND = audio.newSoundEffect("success.ogg");
+	private final static jog.audio.Source SUCCESS_SOUND = jog.audio.newSource("success.ogg");
 	
 	protected Map map;
 	protected boolean winState;
@@ -190,13 +190,13 @@ public class Game extends Scene {
 	public void draw() {
 		map.draw(player);
 		if (winState && currentLevel < LevelLoader.LEVEL_COUNT) {
-			graphics.printCentred("Level " + currentLevel + " cleared!", 0, 32, 1, window.width());
-			graphics.printCentred("Press [SPACE] to advance.", 0, 48, 1, window.width());
+			graphics.printCentred("Level " + currentLevel + " cleared!", 0, 32, window.width());
+			graphics.printCentred("Press [SPACE] to advance.", 0, 48, window.width());
 		} else if (winState) {
-			graphics.printCentred("Level " + currentLevel + " cleared!", 0, 32, 1, window.width());
-			graphics.printCentred("Congratulations! You've reached the end of Little Boxes!", 0, 48, 1, window.width());
+			graphics.printCentred("Level " + currentLevel + " cleared!", 0, 32, window.width());
+			graphics.printCentred("Congratulations! You've reached the end of Little Boxes!", 0, 48, window.width());
 		} else {
-			graphics.printCentred("Level " + currentLevel + ".", 0, 32, 1, window.width());
+			graphics.printCentred("Level " + currentLevel + ".", 0, 32, window.width());
 		}
 		graphics.print("Moves: " + actions.size(), 0, 0);
 	}

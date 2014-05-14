@@ -1,6 +1,8 @@
 package scn;
 
-public abstract class Scene implements jog.input.EventHandler {
+import jog.input.InputEventHandler;
+
+public abstract class Scene implements InputEventHandler {
 
 	protected run.Main main;
 	

@@ -1,14 +1,11 @@
 package run;
 
-import java.io.File;
-
-import org.lwjgl.Sys;
-
 import cls.Score;
 
 import jog.*;
+import jog.input.InputEventHandler;
 
-public class Main implements jog.input.EventHandler {
+public class Main implements InputEventHandler {
 	
 	public static void main(String[] args) {
 		new Main();
@@ -23,7 +20,6 @@ public class Main implements jog.input.EventHandler {
 		"icon64.png", // 64
 	};
 	
-	private double lastFrameTime;
 	private double dt;
 	private java.util.Stack<scn.Scene> sceneStack;
 	private scn.Scene currentScene;
@@ -31,14 +27,14 @@ public class Main implements jog.input.EventHandler {
 	public Score score;
 	
 	public Main() {
-		lastFrameTime = (double)(Sys.getTime()) / Sys.getTimerResolution();
-		window.initialise(TITLE, WIDTH, HEIGHT);
+		window.initialise(TITLE, WIDTH, HEIGHT, 60);
+		filesystem.addLocation("src");
 		window.setIcon(ICONS);
 		graphics.initialise();
 		sceneStack = new java.util.Stack<scn.Scene>();
 		start();
 		while(!window.isClosed()) {
-			dt = getDeltaTime();
+			dt = window.getDeltaTime();
 			update(dt);
 			draw();
 		}
@@ -47,8 +43,8 @@ public class Main implements jog.input.EventHandler {
 	
 	private void start() {
 		score = new Score();
-		graphics.Font font = graphics.newBitmapFont("font.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz1234567890.,_-!?()[]><#~:;/\\^'\"{}£$+=@@@@@@@");
-		graphics.setFont(font);
+		font.Font f = font.newBitmapFont("font.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz1234567890.,_-!?()[]><#~:;/\\^'\"{}£$+=@@@@@@@");
+		graphics.setFont(f);
 		setScene(new scn.Title(this));
 	}
 	
@@ -76,7 +72,6 @@ public class Main implements jog.input.EventHandler {
 		audio.update();
 		input.update(this);
 		window.update();
-//		currentScene.update(dt);
 		for (scn.Scene scene : sceneStack) {
 			scene.update(dt);
 		}
@@ -114,17 +109,6 @@ public class Main implements jog.input.EventHandler {
 	@Override
 	public void keyReleased(int key) {
 		currentScene.keyReleased(key);
-	}
-
-	/**
-	 * Calculates the time taken since the last tick in seconds as a double-precision floating point n)umber.
-	 * @return the time in seconds since the last frame.
-	 */
-	private double getDeltaTime() {
-		double time = (double)(Sys.getTime()) / Sys.getTimerResolution();
-	    double delta = (time - lastFrameTime);
-	    lastFrameTime = time;
-	    return delta;
 	}
 	
 }

@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="ext/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="ext/jogg-0.0.7.jar"/>
 	<classpathentry kind="lib" path="ext/jorbis-0.0.15.jar"/>
 	<classpathentry kind="lib" path="ext/junit-4.11.jar"/>
@@ -11,6 +10,9 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Little Boxes/ext/natives/windows"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="ext/slick.jar"/>
+	<classpathentry kind="lib" path="/JÖG/jog.jar"/>
+	<classpathentry kind="lib" path="ext/easyogg.jar"/>
+	<classpathentry kind="lib" path="ext/jog.jar"/>
+	<classpathentry kind="lib" path="ext/PNGDecoder.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -103,7 +103,7 @@ public class Map {
 			graphics.pop();
 		}
 		graphics.pop();
-		graphics.printCentred(message, 0, window.height() - 64, 1, window.width());
+		graphics.printCentred(message, 0, window.height() - 64, window.width());
 	}
 	
 	private void drawTile(int tile, int x, int y) {

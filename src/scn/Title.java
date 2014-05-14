@@ -47,7 +47,7 @@ public class Title extends Scene {
 	@Override
 	public void draw() {
 		graphics.setColour(0, 0, 0);
-		graphics.printCentred("Press [SPACE] to begin.", 0, 256, 1, window.width());
+		graphics.printCentred("Press [SPACE] to begin.", 0, 256, window.width());
 	}
 
 	@Override
